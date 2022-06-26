@@ -11,11 +11,13 @@
                 <label class="upload-label">
                     <i class="material-icons">attach_file</i>
                     <span class="upload-title">Upload Image</span>
-                    <input type="file" @change="handleFileUpload( $event )">
+                    <input type="file"
+                           v-bind:value="test"
+                            v-on:input="handleFileUpload( $event )">
                 </label>
             </div>
             <p>
-                <input type="checkbox" id="privacyCheckbox" v-model="isPrivacy" :disabled="isPrivacy">
+                <input type="checkbox" id="privacyCheckbox" v-model="isPrivacy" :disabled="isPrivacy" @change="changePrivacyStyle()">
                 <label for="privacyCheckbox"
                        :style="{'color': privacyColor}"
                 >I agree to the Terms and Conditions and Privacy Policy</label>
@@ -27,14 +29,6 @@
         <clip-loader :loading="noiseLoading" :color="loadingColor" :size="loadingSize"></clip-loader>
         <div class="result" :style="{'color': isImageOriginal ? '#4CAF50' : '#F44336'}">{{resultProbability}}</div>
 
-<!--        <h3>Noise analyzer</h3>-->
-<!--        <clip-loader :loading="noiseLoading" :color="loadingColor" :size="loadingSize"></clip-loader>-->
-<!--        <img ref="noiseImg" src="">-->
-
-<!--        <h3>Neural network</h3>-->
-<!--        <clip-loader :loading="neuralLoading" :color="loadingColor" :size="loadingSize"></clip-loader>-->
-<!--        <img ref="ganImg" src="">-->
-
         <details>
             <summary>Additional info for geeks</summary>
             <div class="geek-info" v-html="geekInfo"></div>
@@ -42,15 +36,9 @@
 
         <h3>Contacts</h3>
         <ul>
-<!--            <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>-->
-<!--            <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>-->
-<!--            <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>-->
-<!--            <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>-->
-<!--            <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>-->
             <li><a href="mailto:vladislav.ugm@gmail.com" target="_blank">Gmail</a></li>
         </ul>
 
-<!--        <button v-on:click="test">Test</button>-->
     </div>
 </template>
 
@@ -69,6 +57,7 @@
 
         data() {
             return {
+                test: '',
                 isPrivacy: false,
                 privacyColor: '#2c3e50',
                 BLOG: [],
@@ -85,68 +74,17 @@
             };
         },
         methods: {
-            // handleFileUpload( event ){
-            //     this.file = event.target.files[0];
-            //
-            //     this.$refs.noiseImg.src = '';
-            //     this.$refs.ganImg.src = '';
-            //     this.hideUploader();
-            //     this.noiseLoading = true;
-            //     this.neuralLoading = true;
-            //
-            //     let formData = new FormData();
-            //     formData.append('file', this.file);
-            //
-            //     axios.post( 'http://localhost:8081/noiseAnalyzing',
-            //         formData,
-            //         {
-            //             headers: {
-            //                 'Content-Type': 'multipart/form-data'
-            //             },
-            //             responseType: 'arraybuffer'
-            //         }
-            //     ).then(response => {
-            //         this.$refs.noiseImg.src = 'data:image/png;base64,' + btoa(
-            //             new Uint8Array(response.data)
-            //                 .reduce((data, byte) => data + String.fromCharCode(byte), '')
-            //         );
-            //         this.noiseLoading = false;
-            //
-            //         this.showUploader();
-            //     })
-            //     .catch(function(){
-            //         console.log('FAILURE!!');
-            //         this.showUploader();
-            //     });
-            //     axios.post( 'http://localhost:8081/ganAnalyzing',
-            //         formData,
-            //         {
-            //             headers: {
-            //                 'Content-Type': 'multipart/form-data'
-            //             },
-            //             responseType: 'arraybuffer'
-            //         }
-            //     ).then(response => {
-            //         this.$refs.ganImg.src = 'data:image/png;base64,' + btoa(
-            //             new Uint8Array(response.data)
-            //                 .reduce((data, byte) => data + String.fromCharCode(byte), '')
-            //         );
-            //         this.neuralLoading = false;
-            //
-            //         this.showUploader();
-            //     })
-            //         .catch(function(){
-            //             console.log('FAILURE!!');
-            //             this.showUploader();
-            //         });
-            // },
-            handleFileUpload( event ){
-
+            changePrivacyStyle(){
                 if(!this.isPrivacy){
                     this.privacyColor = '#F44336';
-                    return;
                 }else{
                     this.privacyColor = '#2c3e50';
+                }
+            },
+            handleFileUpload( event ){
+                this.changePrivacyStyle();
+                if(!this.isPrivacy){
+                    return;
                 }
 
                 this.file = event.target.files[0];
@@ -158,7 +96,7 @@
                 let formData = new FormData();
                 formData.append('file', this.file);
 
-                axios.post( 'http://localhost:8081/analyzing',
+                axios.post( 'http://194.67.121.215:8081/analyzing',
                     formData,
                     {
                         headers: {
@@ -169,21 +107,7 @@
                 ).then(response => {
                     console.log(response.data);
 
-                    // const postfix = "% that the photo is original";
                     let metadataOriginal = response.data.metadataResult.originalProbability;
-                    // let neuralOriginal = response.data.neuralResult.originalProbability;
-                    // let neuralFake = response.data.neuralResult.fakeProbability;
-                    //
-                    // this.isImageOriginal = false;
-                    // if (metadataOriginal === 0){
-                    //     this.resultProbability = 0 + postfix;
-                    // }else if(neuralOriginal === neuralFake){
-                    //     this.resultProbability = "The same chance. Impossible to decide";
-                    // }else {
-                    //     this.resultProbability = (neuralOriginal / (neuralOriginal+neuralFake)) * 100;
-                    //     this.isImageOriginal = this.resultProbability > 50;
-                    //     this.resultProbability += postfix;
-                    // }
 
                     const prefix = "This photo is ";
                     let neuralOriginal = response.data.neuralResult.originalProbability;
