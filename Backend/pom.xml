@@ -12,7 +12,7 @@
 	<artifactId>demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Fake Detector</name>
-	<description>Project for &quot;VKR&quot;</description>
+	<description>Project for VKR</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -48,18 +48,18 @@
 		</dependency>
 
 <!--		3-rd party-->
-		<dependency>
-			<artifactId>image-processing</artifactId>
-			<groupId>org.openimaj</groupId>
-			<version>1.3.10</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<artifactId>faces</artifactId>
-			<groupId>org.openimaj</groupId>
-			<version>1.3.10</version>
-			<scope>compile</scope>
-		</dependency>
+<!--		<dependency>-->
+<!--			<artifactId>image-processing</artifactId>-->
+<!--			<groupId>org.openimaj</groupId>-->
+<!--			<version>1.3.10</version>-->
+<!--			<scope>compile</scope>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<artifactId>faces</artifactId>-->
+<!--			<groupId>org.openimaj</groupId>-->
+<!--			<version>1.3.10</version>-->
+<!--			<scope>compile</scope>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
@@ -74,6 +74,21 @@
 			<groupId>nz.ac.waikato.cms.weka</groupId>
 			<artifactId>weka-stable</artifactId>
 			<version>3.8.6</version>
+		</dependency>
+		<dependency>
+			<groupId>com.drewnoakes</groupId>
+			<artifactId>metadata-extractor</artifactId>
+			<version>2.18.0</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nih.imagej</groupId>
+			<artifactId>imagej</artifactId>
+			<version>1.45</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.kzwang</groupId>
+			<artifactId>lire</artifactId>
+			<version>0.9.4-kzwang-beta1</version>
 		</dependency>
 
 	</dependencies>

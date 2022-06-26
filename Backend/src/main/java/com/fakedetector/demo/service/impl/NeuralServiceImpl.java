@@ -9,8 +9,9 @@ import ij.plugin.ContrastEnhancer;
 import ij.plugin.ImageCalculator;
 import ij.process.ImageProcessor;
 import lombok.extern.log4j.Log4j;
-import org.neuroph.core.NeuralNetwork;
-import org.neuroph.imgrec.ImageRecognitionPlugin;
+//import org.neuroph.core.NeuralNetwork;
+//import org.neuroph.imgrec.ImageRecognitionPlugin;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import weka.classifiers.trees.J48;
 import weka.core.Instances;
@@ -21,11 +22,12 @@ import weka.filters.Filter;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.*;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import static ij.io.FileSaver.setJpegQuality;
 
-@Log4j
+@Slf4j
 @Service
 public class NeuralServiceImpl implements NeuralService {
 
@@ -42,7 +44,7 @@ public class NeuralServiceImpl implements NeuralService {
             img = ImageIO.read(imageFile);
         } catch (IOException e) {
             log.error(e.getMessage());
-            log.debug(e.getStackTrace());
+            log.debug(Arrays.toString(e.getStackTrace()));
             return null;
 //           todo errorResponse
         }
@@ -107,7 +109,7 @@ public class NeuralServiceImpl implements NeuralService {
         J48 j48 = null;
         String result = null;
         try {
-            j48 = (J48) SerializationHelper.read("demo/nnet/FCTHFilter.model");
+            j48 = (J48) SerializationHelper.read("nnet/FCTHFilter.model");
 
 //            try(FileWriter writer = new FileWriter("tmp/table.arff", false))
 //            {

@@ -1,0 +1,5 @@
+@relation real_vs_fake
+@attribute filename string
+@attribute class {REAL,FAKE}
+@data
+-ELA.jpg,REAL

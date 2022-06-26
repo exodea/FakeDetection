@@ -5,13 +5,14 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.fakedetector.demo.api.dto.MetadataResult;
 import com.fakedetector.demo.service.MetadataService;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
-@Log4j
+@Slf4j
 @Service
 public class MetadataServiceImpl implements MetadataService {
 
@@ -24,7 +25,7 @@ public class MetadataServiceImpl implements MetadataService {
             metadata = ImageMetadataReader.readMetadata(imageFile);
         } catch (ImageProcessingException | IOException e) {
             log.error(e.getMessage());
-            log.debug(e.getStackTrace());
+            log.debug(Arrays.toString(e.getStackTrace()));
             return null;
 //           todo errorResponse
         }

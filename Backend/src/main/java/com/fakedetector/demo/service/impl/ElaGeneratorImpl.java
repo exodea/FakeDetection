@@ -7,6 +7,7 @@ import ij.plugin.ContrastEnhancer;
 import ij.plugin.ImageCalculator;
 import ij.process.ImageProcessor;
 import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -19,7 +20,7 @@ import java.util.Arrays;
 
 import static ij.io.FileSaver.setJpegQuality;
 
-@Log4j
+@Slf4j
 @Service
 public class ElaGeneratorImpl implements ElaGenerator {
 
