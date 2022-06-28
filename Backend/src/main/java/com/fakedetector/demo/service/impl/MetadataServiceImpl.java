@@ -3,6 +3,7 @@ package com.fakedetector.demo.service.impl;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
+import com.fakedetector.demo.api.dto.ErrorMessageDto;
 import com.fakedetector.demo.api.dto.MetadataResult;
 import com.fakedetector.demo.service.MetadataService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,7 @@ import java.util.Arrays;
 public class MetadataServiceImpl implements MetadataService {
 
     @Override
-    public MetadataResult analyze(InputStream imageFile) {
+    public MetadataResult analyze(InputStream imageFile) throws ErrorMessageDto {
         StringBuilder extractedMetadata = new StringBuilder();
         Metadata metadata;
 
@@ -26,8 +27,9 @@ public class MetadataServiceImpl implements MetadataService {
         } catch (ImageProcessingException | IOException e) {
             log.error(e.getMessage());
             log.debug(Arrays.toString(e.getStackTrace()));
-            return null;
-//           todo errorResponse
+            throw ErrorMessageDto.builder()
+                    .message("An unexpected error occurred. Please try later")
+                    .build();
         }
 
         metadata.getDirectories().forEach(directory -> {

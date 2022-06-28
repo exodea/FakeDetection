@@ -48,6 +48,7 @@
 
     export default {
         name: 'MainPage',
+        title: 'Fake Detector',
         props: {
             msg: String
         },
@@ -138,8 +139,14 @@
 
                     this.showUploader();
                 })
-                .catch(function(){
+                .catch(error => {
                     console.log('FAILURE!!');
+                    console.log(error.response)
+
+                    this.isImageOriginal = false;
+                    this.resultProbability = error.response.data;
+
+                    this.noiseLoading = false;
                     this.showUploader();
                 });
             },

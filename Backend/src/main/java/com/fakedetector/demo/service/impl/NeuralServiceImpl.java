@@ -1,5 +1,6 @@
 package com.fakedetector.demo.service.impl;
 
+import com.fakedetector.demo.api.dto.ErrorMessageDto;
 import com.fakedetector.demo.api.dto.NeuralResult;
 import com.fakedetector.demo.service.NeuralService;
 import com.fakedetector.demo.weka.filters.unsupervised.instance.imagefilter.BinaryPatternsPyramidFilter;
@@ -8,9 +9,6 @@ import ij.io.FileSaver;
 import ij.plugin.ContrastEnhancer;
 import ij.plugin.ImageCalculator;
 import ij.process.ImageProcessor;
-import lombok.extern.log4j.Log4j;
-//import org.neuroph.core.NeuralNetwork;
-//import org.neuroph.imgrec.ImageRecognitionPlugin;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import weka.classifiers.trees.J48;
@@ -23,7 +21,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.*;
 import java.util.Arrays;
-import java.util.HashMap;
 
 import static ij.io.FileSaver.setJpegQuality;
 
@@ -36,7 +33,7 @@ public class NeuralServiceImpl implements NeuralService {
     private final String BASE_PATH = "tmp/";
 
     @Override
-    public NeuralResult analyze(InputStream imageFile) {
+    public NeuralResult analyze(InputStream imageFile) throws ErrorMessageDto {
 
         Image img;
 
@@ -45,8 +42,9 @@ public class NeuralServiceImpl implements NeuralService {
         } catch (IOException e) {
             log.error(e.getMessage());
             log.debug(Arrays.toString(e.getStackTrace()));
-            return null;
-//           todo errorResponse
+            throw ErrorMessageDto.builder()
+                    .message("An unexpected error occurred. Please try later")
+                    .build();
         }
 
         File file = new File(BASE_PATH);

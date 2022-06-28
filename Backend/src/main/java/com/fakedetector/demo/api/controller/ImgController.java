@@ -1,12 +1,15 @@
 package com.fakedetector.demo.api.controller;
 
 import com.fakedetector.demo.api.dto.AnalyzingResponse;
+import com.fakedetector.demo.api.dto.ErrorMessageDto;
 import com.fakedetector.demo.api.dto.MetadataResult;
 import com.fakedetector.demo.service.MetadataService;
 import com.fakedetector.demo.service.NeuralService;
 import com.fakedetector.demo.weka.filters.unsupervised.instance.imagefilter.BinaryPatternsPyramidFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import weka.classifiers.trees.J48;
@@ -16,6 +19,7 @@ import weka.core.converters.ConverterUtils;
 import weka.filters.Filter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -29,11 +33,34 @@ public class ImgController {
 
     @PostMapping(value = "/analyzing", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseBody
-    public AnalyzingResponse analyzing(@RequestPart("file") MultipartFile file) throws IOException { // todo delete throws
-        return AnalyzingResponse.builder()
-                .metadataResult(metadataService.analyze(file.getInputStream()))
-                .neuralResult(neuralService.analyze(file.getInputStream()))
-                .build();
+    public ResponseEntity analyzing(@RequestPart("file") MultipartFile file) {
+
+        String filename = file.getOriginalFilename();
+        Optional<String> extension = Optional.of(filename)
+                .filter(f -> f.contains("."))
+                .map(f -> f.substring(filename.lastIndexOf(".") + 1));
+        if ( extension.isEmpty()
+                ||
+             !(extension.get().equals("jpg")
+                || extension.get().equals("jpeg")
+                || extension.get().equals("tiff")) ){
+            return new ResponseEntity("Wrong extension of file. Supports only JPG and TIFF extensions.", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            return new ResponseEntity(
+                    AnalyzingResponse.builder()
+                        .metadataResult(metadataService.analyze(file.getInputStream()))
+                        .neuralResult(neuralService.analyze(file.getInputStream()))
+                        .build(),
+                    HttpStatus.OK);
+        } catch (ErrorMessageDto errorMessageDto) {
+            return new ResponseEntity(errorMessageDto.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (OutOfMemoryError e) {
+            return new ResponseEntity("This image so big! Please try send smaller image", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity("An unexpected error occurred. Please try later", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping(value = "/test")
