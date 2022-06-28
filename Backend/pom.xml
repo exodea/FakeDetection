@@ -101,8 +101,8 @@
 				<version>2.5.1</version>
 				<configuration>
 					<fork>true</fork>
-					<meminitial>512m</meminitial>
-					<maxmem>256m</maxmem>
+					<meminitial>256m</meminitial>
+					<maxmem>512m</maxmem>
 				</configuration>
 			</plugin>
 			<plugin>
