@@ -2,93 +2,69 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.3</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
 	<groupId>com.fakedetector</groupId>
 	<artifactId>demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Fake Detector</name>
-	<description>Project for VKR</description>
+	<description>Fake Detector helps to recognize photos which were edited</description>
 	<properties>
 		<java.version>11</java.version>
+		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
+		<spring.version>2.6.3</spring.version>
+		<lombok.version>1.18.24</lombok.version>
+		<weka.version>3.8.6</weka.version>
+		<metadata-extractor.version>2.18.0</metadata-extractor.version>
+		<imagej.version>1.45</imagej.version>
+		<lire.version>0.9.4-kzwang-beta1</lire.version>
 	</properties>
 
 	<dependencies>
 
-<!--		Spring-->
-
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-data-jpa</artifactId>-->
-<!--		</dependency>-->
+<!--		Necessary Core		-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-devtools</artifactId>-->
-<!--			<optional>true</optional>-->
-<!--		</dependency>-->
-
-<!--		Nececcery Core-->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
-
-<!--		3-rd party-->
-<!--		<dependency>-->
-<!--			<artifactId>image-processing</artifactId>-->
-<!--			<groupId>org.openimaj</groupId>-->
-<!--			<version>1.3.10</version>-->
-<!--			<scope>compile</scope>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<artifactId>faces</artifactId>-->
-<!--			<groupId>org.openimaj</groupId>-->
-<!--			<version>1.3.10</version>-->
-<!--			<scope>compile</scope>-->
-<!--		</dependency>-->
 		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>2.17.2</version>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<scope>provided</scope>
 		</dependency>
+
+<!--		Additional third parties		-->
 		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.17.2</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<version>${spring.version}</version>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>nz.ac.waikato.cms.weka</groupId>
 			<artifactId>weka-stable</artifactId>
-			<version>3.8.6</version>
+			<version>${weka.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.drewnoakes</groupId>
 			<artifactId>metadata-extractor</artifactId>
-			<version>2.18.0</version>
+			<version>${metadata-extractor.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nih.imagej</groupId>
 			<artifactId>imagej</artifactId>
-			<version>1.45</version>
+			<version>${imagej.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.kzwang</groupId>
 			<artifactId>lire</artifactId>
-			<version>0.9.4-kzwang-beta1</version>
+			<version>${lire.version}</version>
 		</dependency>
 
 	</dependencies>
@@ -98,16 +74,19 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.5.1</version>
+				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
 					<fork>true</fork>
-					<meminitial>256m</meminitial>
-					<maxmem>512m</maxmem>
+<!--					<meminitial>256m</meminitial>-->
+<!--					<maxmem>512m</maxmem>-->
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring.version}</version>
 				<configuration>
 					<excludes>
 						<exclude>
@@ -119,5 +98,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
