@@ -59,7 +59,7 @@ public class NeuralServiceImpl implements NeuralService {
 
         String origPath = BASE_PATH + "-original.jpg";
         String resavedPath = BASE_PATH + "-resaved.jpg";
-        String elaPath = BASE_PATH + "-ELA.jpg"; //TODO: WHY .PNG????????
+        String elaPath = BASE_PATH + "-ELA.jpg";
 
         ImagePlus orig = new ImagePlus("Source Image", img);
         FileSaver fs = new FileSaver(orig);
@@ -71,7 +71,6 @@ public class NeuralServiceImpl implements NeuralService {
         ImagePlus resaved = new ImagePlus(resavedPath);
 
         ImagePlus diff = new ImageCalculator().run("create difference", orig, resaved);
-//        diff.setTitle("ELA @ " + QUALITY + "%");
         ImageProcessor ip = diff.getProcessor();
 
         new ContrastEnhancer().stretchHistogram(diff, 0.05);
@@ -87,17 +86,6 @@ public class NeuralServiceImpl implements NeuralService {
             imp = ip.crop();
         }
 
-//        NeuralNetwork nnet;
-//        try {
-//            File NNetwork = new File("demo/nnet/MLPV2.0.nnet");
-//            nnet = NeuralNetwork.load(new FileInputStream(NNetwork)); // load trained neural network saved with {todo:} Neuroph Studio
-//        } catch (FileNotFoundException e) {
-//            log.error(e.getMessage());
-//            log.debug(e.getStackTrace());
-//            return null;
-////           todo errorResponse
-//        }
-
         imp = imp.resize((int) DIMENSION.getWidth(), (int) DIMENSION.getHeight());
 
         ImagePlus er = new ImagePlus("Source Image", imp);
@@ -105,30 +93,10 @@ public class NeuralServiceImpl implements NeuralService {
         setJpegQuality(100);
         fser.saveAsJpeg(elaPath);
 
-//        ImageRecognitionPlugin imageRecognition = (ImageRecognitionPlugin) nnet.getPlugin(ImageRecognitionPlugin.class);
-//        HashMap<String, Double> output = new HashMap<>(imageRecognition.recognizeImage(imp.getBufferedImage()));
-
-//        TODO: test
         J48 j48 = null;
         String result = null;
         try {
             j48 = (J48) SerializationHelper.read("nnet/FCTHFilter.model");
-
-//            try(FileWriter writer = new FileWriter("tmp/table.arff", false))
-//            {
-//                StringBuilder content = new StringBuilder();
-//                content.append("@relation real_vs_fake").append("\n");
-//                content.append("@attribute filename string").append("\n");
-//                content.append("@attribute class {REAL,FAKE}").append("\n");
-//                content.append("@data").append("\n");
-//
-//                content.append("-ELA.png,REAL");
-//                writer.write(content.toString());
-//                writer.flush();
-//            }
-//            catch(IOException ex){
-//                System.out.println(ex.getMessage());
-//            }
 
             ConverterUtils.DataSource source = new ConverterUtils.DataSource("tmp/table.arff");
             Instances testSet = source.getDataSet();
@@ -153,19 +121,6 @@ public class NeuralServiceImpl implements NeuralService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-//        HashMap<String, Double> output = new HashMap<>();
-//        TODO: end
-
-//        if (output.isEmpty()) {
-//            log.info("Image Recognition Failed");
-//            output.put("real", 0.0);
-//            output.put("faked", 0.0);
-//        }
-
-//        double ptTest = (output.get("real") / (output.get("real")+output.get("faked"))) * 100;
-//        log.info("Probability of truth: " + ptTest);
-//        log.info(output.get("real") + " : " + output.get("faked"));
 
         return NeuralResult.builder()
                 .originalProbability(result)

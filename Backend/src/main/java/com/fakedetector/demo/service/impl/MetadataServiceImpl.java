@@ -45,8 +45,6 @@ public class MetadataServiceImpl implements MetadataService {
         int real = 1;
         StringBuilder fakeReason = new StringBuilder();
 
-//        log.info(extractedMetadata);
-
         String[] splitMetadata = extractedMetadata.toString().split("\n");
         for (String string : splitMetadata) { // TODO: change on method
             String fakeReasonString = fakeReason.toString();
