@@ -3,8 +3,9 @@ package com.fakedetector.demo.service.impl;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
-import com.fakedetector.demo.api.dto.ErrorMessageDto;
 import com.fakedetector.demo.api.dto.MetadataResult;
+import com.fakedetector.demo.exception.ErrorCode;
+import com.fakedetector.demo.exception.GeneralException;
 import com.fakedetector.demo.service.MetadataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,13 +13,15 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Service
 public class MetadataServiceImpl implements MetadataService {
 
     @Override
-    public MetadataResult analyze(InputStream imageFile) throws ErrorMessageDto {
+    public MetadataResult analyze(InputStream imageFile) {
         StringBuilder extractedMetadata = new StringBuilder();
         Metadata metadata;
 
@@ -27,9 +30,9 @@ public class MetadataServiceImpl implements MetadataService {
         } catch (ImageProcessingException | IOException e) {
             log.error(e.getMessage());
             log.debug(Arrays.toString(e.getStackTrace()));
-            throw ErrorMessageDto.builder()
-                    .message("An unexpected error occurred. Please try later")
-                    .build();
+            Map<String, Object> extra = new HashMap<>();
+            extra.put("debug", "Unable to read metadata");
+            throw new GeneralException(ErrorCode.FD0000, extra);
         }
 
         metadata.getDirectories().forEach(directory -> {

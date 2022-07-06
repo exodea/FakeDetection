@@ -1,7 +1,8 @@
 package com.fakedetector.demo.service.impl;
 
-import com.fakedetector.demo.api.dto.ErrorMessageDto;
 import com.fakedetector.demo.api.dto.NeuralResult;
+import com.fakedetector.demo.exception.ErrorCode;
+import com.fakedetector.demo.exception.GeneralException;
 import com.fakedetector.demo.service.NeuralService;
 import com.fakedetector.demo.weka.filters.unsupervised.instance.imagefilter.BinaryPatternsPyramidFilter;
 import ij.ImagePlus;
@@ -19,8 +20,12 @@ import weka.filters.Filter;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static ij.io.FileSaver.setJpegQuality;
 
@@ -33,7 +38,7 @@ public class NeuralServiceImpl implements NeuralService {
     private final String BASE_PATH = "tmp/";
 
     @Override
-    public NeuralResult analyze(InputStream imageFile) throws ErrorMessageDto {
+    public NeuralResult analyze(InputStream imageFile) {
 
         Image img;
 
@@ -42,9 +47,9 @@ public class NeuralServiceImpl implements NeuralService {
         } catch (IOException e) {
             log.error(e.getMessage());
             log.debug(Arrays.toString(e.getStackTrace()));
-            throw ErrorMessageDto.builder()
-                    .message("An unexpected error occurred. Please try later")
-                    .build();
+            Map<String, Object> extra = new HashMap<>();
+            extra.put("debug", "Unable to create image from InputStream");
+            throw new GeneralException(ErrorCode.FD0000, extra);
         }
 
         File file = new File(BASE_PATH);
