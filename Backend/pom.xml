@@ -10,11 +10,11 @@
 	<properties>
 		<java.version>11</java.version>
 		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
-		<spring.version>2.6.3</spring.version>
+		<spring.version>2.7.1</spring.version>
 		<lombok.version>1.18.24</lombok.version>
 		<weka.version>3.8.6</weka.version>
 		<metadata-extractor.version>2.18.0</metadata-extractor.version>
-		<imagej.version>1.45</imagej.version>
+		<imagej.version>1.47</imagej.version>
 		<lire.version>0.9.4-kzwang-beta1</lire.version>
 	</properties>
 
