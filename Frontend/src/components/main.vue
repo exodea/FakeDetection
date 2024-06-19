@@ -97,7 +97,7 @@
                 let formData = new FormData();
                 formData.append('file', this.file);
 
-                axios.post( 'http://79.174.82.188:8081/analyzing',
+                axios.post( 'http://localhost:8081/analyzing',
                     formData,
                     {
                         headers: {
